@@ -1,6 +1,8 @@
 #![allow(unused)]
 struct Solution;
 
+use std::collections::HashMap;
+
 impl Solution {
     /// [1. Two Sum](https://leetcode.com/problems/two-sum/)
     ///
@@ -11,14 +13,25 @@ impl Solution {
     /// You can return the answer in any order.
     ///
     pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
-        for index_l in 0..nums.len() {
-            for index_r in index_l + 1..nums.len() {
-                if nums[index_l] + nums[index_r] == target {
-                    return vec![index_l as i32, index_r as i32];
+        let mut container: HashMap<i32, i32> = HashMap::new();
+
+        for (index, &value) in nums.iter().enumerate() {
+            container.insert(value, index as i32);
+        }
+
+        // println!("container={container:?}");
+
+        for (index, &value) in nums.iter().enumerate() {
+            let key = &(target - value);
+            if container.contains_key(key) {
+                let index_second = *container.get(key).unwrap();
+                if index as i32 != index_second {
+                    return vec![index as i32, index_second];
                 }
             }
         }
-        panic!("There are no such pairs")
+
+        panic!("There are no such pairs");
     }
 }
 

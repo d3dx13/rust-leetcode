@@ -56,11 +56,7 @@ impl Solution {
                 if kgrid.len() < 2 {
                     res[i][j] = 0;
                 } else {
-                    let mut kmin = i32::MAX;
-                    for pair in kgrid.windows(2) {
-                        kmin = kmin.min(pair[1] - pair[0]);
-                    }
-                    res[i][j] = kmin;
+                    res[i][j] = kgrid.windows(2).map(|x| x[1] - x[0]).min().unwrap();
                 }
             }
         }

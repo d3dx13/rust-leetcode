@@ -25,54 +25,28 @@ impl Solution {
     /// Given a roman numeral, convert it to an integer.
     ///
     pub fn roman_to_int(s: String) -> i32 {
-        let mut s: Vec<char> = s.chars().collect();
+        let numbers: Vec<i32> = s
+            .chars()
+            .map(|c| match c {
+                'I' => 1,
+                'V' => 5,
+                'X' => 10,
+                'L' => 50,
+                'C' => 100,
+                'D' => 500,
+                'M' => 1000,
+                _ => panic!("Illegal character: {}", c),
+            })
+            .collect();
 
         let mut res = 0;
-        let mut i = 0;
-        while i < s.len() {
-            match s.get(i) {
-                Some('I') => match s.get(i + 1) {
-                    Some('V') => {
-                        res += 4;
-                        i += 1
-                    }
-                    Some('X') => {
-                        res += 9;
-                        i += 1
-                    }
-                    _ => res += 1,
-                },
-                Some('X') => match s.get(i + 1) {
-                    Some('L') => {
-                        res += 40;
-                        i += 1
-                    }
-                    Some('C') => {
-                        res += 90;
-                        i += 1
-                    }
-                    _ => res += 10,
-                },
-                Some('C') => match s.get(i + 1) {
-                    Some('D') => {
-                        res += 400;
-                        i += 1
-                    }
-                    Some('M') => {
-                        res += 900;
-                        i += 1
-                    }
-                    _ => res += 100,
-                },
-                Some('V') => res += 5,
-                Some('L') => res += 50,
-                Some('D') => res += 500,
-                Some('M') => res += 1000,
-                _ => {}
+        for i in 0..numbers.len() {
+            if i < numbers.len() - 1 && numbers[i] < numbers[i + 1] {
+                res -= numbers[i];
+            } else {
+                res += numbers[i];
             }
-            i += 1;
         }
-
         res
     }
 }

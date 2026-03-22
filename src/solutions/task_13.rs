@@ -25,28 +25,59 @@ impl Solution {
     /// Given a roman numeral, convert it to an integer.
     ///
     pub fn roman_to_int(s: String) -> i32 {
-        let numbers: Vec<i32> = s
-            .chars()
-            .map(|c| match c {
-                'I' => 1,
-                'V' => 5,
-                'X' => 10,
-                'L' => 50,
-                'C' => 100,
-                'D' => 500,
-                'M' => 1000,
-                _ => panic!("Illegal character: {}", c),
-            })
-            .collect();
-
         let mut res = 0;
-        for i in 0..numbers.len() {
-            if i < numbers.len() - 1 && numbers[i] < numbers[i + 1] {
-                res -= numbers[i];
-            } else {
-                res += numbers[i];
+        let mut last_char = '\0';
+
+        for c in s.chars() {
+            match c {
+                'I' => res += 1,
+                'V' => {
+                    if last_char == 'I' {
+                        res += 3 // 5 - 1 - 1
+                    } else {
+                        res += 5
+                    }
+                }
+                'X' => {
+                    if last_char == 'I' {
+                        res += 8 // 10 - 1 - 1
+                    } else {
+                        res += 10
+                    }
+                }
+                'L' => {
+                    if last_char == 'X' {
+                        res += 30 // 50 - 10 - 10
+                    } else {
+                        res += 50
+                    }
+                }
+                'C' => {
+                    if last_char == 'X' {
+                        res += 80 // 100 - 10 - 10
+                    } else {
+                        res += 100
+                    }
+                }
+                'D' => {
+                    if last_char == 'C' {
+                        res += 300 // 500 - 100 - 100
+                    } else {
+                        res += 500
+                    }
+                }
+                'M' => {
+                    if last_char == 'C' {
+                        res += 800 // 1000 - 100 - 100
+                    } else {
+                        res += 1000
+                    }
+                }
+                _ => panic!("Illegal character: {}", c),
             }
+            last_char = c;
         }
+
         res
     }
 }

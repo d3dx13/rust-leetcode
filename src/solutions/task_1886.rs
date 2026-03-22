@@ -1,4 +1,24 @@
 #![allow(unused)]
+
+/// # Intuition
+///
+/// The limitation on the value in the matrix from 0 to 1 and the maximum size of 10 by 10 makes one think that each row of the matrix can be represented as a 10-bit number.
+///
+/// # Approach
+///
+/// Extending this idea, we can use a 128-bit integer and losslessly compress the matrix into a single 128-bit number. Technically, this could store square matrices up to 11 by 11.
+///
+/// Now all that remains is to learn how to compress not just one matrix, but also all three possible rotations. This can be done without rotating the original matrix (which would require accessing it in a slow heap), simply by changing the indices.
+///
+/// Since we don't need to compare 4 rotations with 4 rotations, but just compare the original matrix with 4 others, we introduce the zero_rotation_only flag, which turns off the calculation of the other 3 rotations of the matrix.
+///
+/// # Complexity
+/// - Time complexity: $$O(n^2)$$
+///
+/// We perform Zero rotations and Zero write operations to the matrices
+///
+/// - Space complexity: $$O(1)$$
+///
 struct Solution;
 
 impl Solution {
@@ -27,7 +47,7 @@ impl Solution {
     ///
     /// * `mat`: n by n (max n is 11) matrix with 0 or 1 values.
     fn compress(mat: Vec<Vec<i32>>, zero_rotation_only: bool) -> (u128, u128, u128, u128) {
-        // assert_eq!(mat.len(), mat[0].len());
+        assert_eq!(mat.len(), mat[0].len());
         let n = mat.len();
 
         let mut res: (u128, u128, u128, u128) = (0, 0, 0, 0);
@@ -38,17 +58,17 @@ impl Solution {
                     res.0 += (1 << x) << (y * n);
 
                     if !zero_rotation_only {
-                        // let rot90_y = n - x - 1;
-                        // let rot90_x = y;
-                        res.1 += (1 << (y)) << ((n - x - 1) * n);
+                        let rot90_y = n - x - 1;
+                        let rot90_x = y;
+                        res.1 += (1 << rot90_x) << (rot90_y * n);
 
-                        // let rot180_y = n - y - 1;
-                        // let rot180_x = n - x - 1;
-                        res.2 += (1 << (n - x - 1)) << ((n - y - 1) * n);
+                        let rot180_y = n - y - 1;
+                        let rot180_x = n - x - 1;
+                        res.2 += (1 << rot180_x) << (rot180_y * n);
 
-                        // let rot270_y = x;
-                        // let rot270_x = n - y - 1;
-                        res.3 += (1 << (n - y - 1)) << ((x) * n);
+                        let rot270_y = x;
+                        let rot270_x = n - y - 1;
+                        res.3 += (1 << rot270_x) << (rot270_y * n);
                     }
                 }
             }

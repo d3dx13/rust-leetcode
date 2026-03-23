@@ -14,8 +14,51 @@ impl Solution {
     /// Notice that the modulo is performed after getting the maximum product.
     ///
     pub fn max_product_path(grid: Vec<Vec<i32>>) -> i32 {
-        let result = Solution::check_paths(&grid, 1, 0, 0);
+        // Prepare input values
+        let y_size = grid.len();
+        let x_size = grid[0].len();
 
+        // (min, max) for path from (0, 0) to (y, x)
+        let mut memory = vec![vec![(i64::MAX, i64::MIN); x_size]; y_size];
+
+        // Fill left and top borders
+        memory[0][0] = (grid[0][0] as i64, grid[0][0] as i64);
+        for y in 1..y_size {
+            memory[y][0].0 = memory[y - 1][0].0 * grid[y][0] as i64;
+            memory[y][0].1 = memory[y - 1][0].1 * grid[y][0] as i64;
+        }
+        for x in 1..x_size {
+            memory[0][x].0 = memory[0][x - 1].0 * grid[0][x] as i64;
+            memory[0][x].1 = memory[0][x - 1].1 * grid[0][x] as i64;
+        }
+
+        for y in 1..y_size {
+            for x in 1..x_size {
+                // Optimization 1: check for zero product
+                if grid[y][x] == 0 {
+                    memory[y][x] = (0, 0);
+                    continue;
+                }
+
+                let value = grid[y][x] as i64;
+                let neighbours = (
+                    memory[y - 1][x].0.min(memory[y][x - 1].0),
+                    memory[y - 1][x].1.max(memory[y][x - 1].1),
+                ); // (min, max)
+                if value > 0 {
+                    memory[y][x].0 = neighbours.0 * value;
+                    memory[y][x].1 = neighbours.1 * value;
+                } else {
+                    memory[y][x].0 = neighbours.1 * value;
+                    memory[y][x].1 = neighbours.0 * value;
+                }
+            }
+        }
+        // dbg!(memory);
+        // todo!();
+
+        let result = memory[grid.len() - 1][grid[0].len() - 1].1; // maximum
+        // let result = Solution::check_paths(&grid, 1, 0, 0);
         // dbg!(result);
         // todo!();
 
@@ -24,6 +67,10 @@ impl Solution {
         } else {
             return (result % 1_000_000_007) as i32;
         }
+    }
+
+    fn check_paths_to(grid: &Vec<Vec<i32>>, y: usize, x: usize) -> i64 {
+        todo!()
     }
 
     fn check_paths(grid: &Vec<Vec<i32>>, product: i64, y: usize, x: usize) -> i64 {
@@ -35,8 +82,10 @@ impl Solution {
         if product == 0 {
             // Optimization 1: check for zero product
             result = 0;
+            // dbg!(result);
         } else if is_y_in_border && is_x_in_border {
             result = product;
+            // dbg!(result);
         } else if is_y_in_border {
             result = Solution::check_paths(grid, product, y, x + 1);
         } else if is_x_in_border {

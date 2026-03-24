@@ -37,11 +37,10 @@ impl Solution {
         let mut product_left: Vec<i32> = Vec::with_capacity(y_size * x_size);
         let mut product_right: Vec<i32> = Vec::with_capacity(y_size * x_size);
         product_left.push(grid[0] % modulo);
-        for i in 1..grid_len {
-            product_left.push((product_left[i - 1] * grid[i]) % modulo);
-        }
         product_right.push(grid[grid_len - 1] % modulo);
         for i in 1..grid_len {
+            // Optimization 1: merge two loops
+            product_left.push((product_left[i - 1] * grid[i]) % modulo);
             product_right.push((product_right[i - 1] * grid[grid_len - i - 1]) % modulo);
         }
         product_right.reverse();

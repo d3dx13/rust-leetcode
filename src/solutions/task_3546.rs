@@ -24,16 +24,11 @@ impl Solution {
             let sum: i64 = grid[y].iter().map(|&x| x as i64).sum();
             y_sums.push(sum + y_sums[y - 1]);
         }
-        for x in 0..x_size {
-            let mut sum: i64 = grid[0][x] as i64;
-            for y in 1..y_size {
-                sum += grid[y][x] as i64;
-            }
-            if x == 0 {
-                x_sums.push(sum);
-            } else {
-                x_sums.push(sum + x_sums[x - 1]);
-            }
+        // Optimization 3: transposed iteration
+        x_sums.push(grid.iter().map(|row| row[0] as i64).sum());
+        for x in 1..x_size {
+            let sum: i64 = grid.iter().map(|row| row[x] as i64).sum();
+            x_sums.push(sum + x_sums[x - 1]);
         }
         // dbg!(y_sums.clone());
         // dbg!(x_sums.clone());

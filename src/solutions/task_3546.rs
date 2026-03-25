@@ -38,6 +38,7 @@ impl Solution {
         // dbg!(y_sums.clone());
         // dbg!(x_sums.clone());
 
+        // Optimization 1:
         // let last_sum = y_sums[y_size - 1] = x_sums[x_size - 1]
         // If the number is even, then such vertical or horizontal cut potentially exists.
         // If the number is odd, then such cut does not exist.
@@ -48,18 +49,16 @@ impl Solution {
         }
         let target_sum: i64 = y_sums[y_size - 1] / 2;
 
-        // The first non-optimal approach is linear search:
-        for x in 0..x_size - 1 {
-            // dbg!((x, x_sums[x], target_sum));
-            if x_sums[x] == target_sum {
-                return true;
-            }
+        // Optimization 2: Binary Search approach
+        x_sums.pop();
+        match x_sums.binary_search(&target_sum) {
+            Ok(_) => return true,
+            Err(_) => {}
         }
-        for y in 0..y_size - 1 {
-            // dbg!((y, y_sums[y], target_sum));
-            if y_sums[y] == target_sum {
-                return true;
-            }
+        y_sums.pop();
+        match y_sums.binary_search(&target_sum) {
+            Ok(_) => return true,
+            Err(_) => {}
         }
         return false;
     }

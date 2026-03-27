@@ -162,7 +162,11 @@ impl Solution {
             // cumulative_sum - removable ?= total_sum - cumulative_sum
             // cumulative_sum - removable ?= total_sum - cumulative_sum
             // removable ?= 2 * cumulative_sum - total_sum
-            let desired_value = (2 * cumulative_sum - total_sum) as i32;
+            let desired_value_i64 = 2 * cumulative_sum - total_sum;
+            if desired_value_i64 > i32::MAX as i64 || desired_value_i64 < i32::MIN as i64 {
+                continue; // HotFix 2: Check for desired_value overflow
+            }
+            let desired_value = desired_value_i64 as i32;
             if removable.contains(&desired_value) {
                 return true;
             }
@@ -204,6 +208,14 @@ mod tests {
     fn test_937() {
         let ret = Solution::can_partition_grid(vec![vec![100000], vec![86218], vec![100000]]);
         assert_eq!(ret, true);
+    }
+
+    #[test]
+    fn test_940() {
+        let mut line1 = vec![100000; 42950];
+        line1.push(10247);
+        let ret = Solution::can_partition_grid(vec![line1, vec![1; 42951]]);
+        assert_eq!(ret, false);
     }
 
     #[test]

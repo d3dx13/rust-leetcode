@@ -2,5 +2,5 @@
 
 Usage:
 ```bash
-cargo test task_{NUMBER}
+cargo test -- --show-output task_{NUMBER}
 ```

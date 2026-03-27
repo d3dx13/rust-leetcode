@@ -118,6 +118,23 @@ impl Solution {
             }
         }
 
+        // HotFix 1: Check array without n-th element in the middle, with cut among this element
+        // vec: 2 5 20  3  4
+        // cum: 2 7 27 30 34
+        // for n in 1..=3 cut
+        // vec[n] = cum[n] - cum[n-1]
+        // after cut(n):
+        //   left = cum[n-1]
+        //   right = cum[last_index] - cum[n]
+        // check if left==right is:
+        // cum[n-1] ?= cum[last_index] - cum[n]
+        // cum[n-1] + cum[n] ?= cum[last_index]
+        for n in 1..last_index {
+            if cumulative_sum[n - 1] + cumulative_sum[n] == cumulative_sum[last_index] {
+                return Some(true);
+            }
+        }
+
         // println!("line impossible");
         return Some(false);
     }

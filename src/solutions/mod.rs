@@ -4,6 +4,7 @@ pub mod task_1594;
 pub mod task_1886;
 pub mod task_2573;
 pub mod task_2839;
+pub mod task_2840;
 pub mod task_2906;
 pub mod task_2946;
 pub mod task_3546;

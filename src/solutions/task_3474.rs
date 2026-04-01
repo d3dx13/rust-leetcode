@@ -2,9 +2,6 @@
 
 struct Solution;
 
-const F: u8 = 'F' as u8;
-const T: u8 = 'T' as u8;
-
 impl Solution {
     /// [3474. Lexicographically Smallest Generated String](https://leetcode.com/problems/lexicographically-smallest-generated-string)
     ///
@@ -23,9 +20,9 @@ impl Solution {
         let mut fixed = vec![false; str1.len() + str2.len() - 1];
         let template = str2.chars().collect::<Vec<char>>();
 
-        for (offset, char) in str1.bytes().enumerate() {
+        for (offset, char) in str1.chars().enumerate() {
             match char {
-                T => {
+                'T' => {
                     for i in 0..str2.len() {
                         if fixed[offset + i] && container[offset + i] != template[i] {
                             return String::new();
@@ -38,9 +35,9 @@ impl Solution {
                 _ => {}
             }
         }
-        'outer: for (offset, char) in str1.bytes().enumerate() {
+        'outer: for (offset, char) in str1.chars().enumerate() {
             match char {
-                F => {
+                'F' => {
                     let mut last_free_i = usize::MAX;
                     for i in (0..template.len()).rev() {
                         if container[offset + i] != template[i] {
@@ -59,7 +56,7 @@ impl Solution {
                 _ => {}
             }
         }
-        dbg!(container.clone());
+        // dbg!(container.clone());
 
         container.into_iter().collect()
     }

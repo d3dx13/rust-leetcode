@@ -7,6 +7,7 @@ pub mod task_2839;
 pub mod task_2840;
 pub mod task_2906;
 pub mod task_2946;
+pub mod task_3474;
 pub mod task_3546;
 pub mod task_3548;
 pub mod task_3567;

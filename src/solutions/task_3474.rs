@@ -18,12 +18,12 @@ impl Solution {
     pub fn generate_string(str1: String, str2: String) -> String {
         let mut container = vec!['a'; str1.len() + str2.len() - 1];
         let mut fixed = vec![false; str1.len() + str2.len() - 1];
-        let template = str2.chars().collect::<Vec<char>>();
+        let template = str2.chars().into_iter().collect::<Vec<char>>();
 
         for (offset, char) in str1.chars().enumerate() {
             match char {
                 'T' => {
-                    for i in 0..str2.len() {
+                    for i in 0..template.len() {
                         if fixed[offset + i] && container[offset + i] != template[i] {
                             return String::new();
                         } else {
